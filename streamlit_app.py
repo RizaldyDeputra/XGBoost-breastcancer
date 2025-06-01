@@ -42,8 +42,8 @@ if uploaded_file is not None:
 
     # Standarisasi
     scaler = StandardScaler()
-    X_Train = scaler.fit_transform(X_train)
-    X_Test = scaler.transform(X_test)
+    X_Train = pd.DataFrame(scaler.fit_transform(X_train), columns=X_train.columns)
+    X_Test = pd.DataFrame(scaler.transform(X_test), columns=X_test.columns)
 
     # Model
     eval_set = [(X_Train, y_train), (X_Test, y_test)]
