@@ -65,17 +65,6 @@ if uploaded_file is not None:
     plot_importance(xgb, importance_type='gain', max_num_features=10, ax=ax2)
     st.pyplot(fig2)
 
-    # Visualisasi Pohon XGBoost
-    from xgboost import plot_tree
-    st.subheader("Visualisasi Pohon XGBoost (3 pohon pertama)")
-    for i in range(3):
-        fig, ax = plt.subplots(figsize=(30, 15))
-        plot_tree(xgb, num_trees=i, ax=ax)
-        ax.set_title(f"XGBoost - Pohon ke-{i}")
-        st.pyplot(fig)
-
-    results = xgb.evals_result()
-
     df_score = pd.DataFrame({
         'iteration': range(len(results['validation_0']['logloss'])),
         'train_logloss': results['validation_0']['logloss'],
