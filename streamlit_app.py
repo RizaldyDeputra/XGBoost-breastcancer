@@ -64,3 +64,37 @@ if uploaded_file is not None:
     fig2, ax2 = plt.subplots(figsize=(10, 8))
     plot_importance(xgb, importance_type='gain', max_num_features=10, ax=ax2)
     st.pyplot(fig2)
+
+    # Visualisasi Pohon XGBoost
+    from xgboost import plot_tree
+    st.subheader("Visualisasi Pohon XGBoost (3 pohon pertama)")
+    for i in range(3):
+        fig, ax = plt.subplots(figsize=(30, 15))
+        plot_tree(xgb, num_trees=i, ax=ax)
+        ax.set_title(f"XGBoost - Pohon ke-{i}")
+        st.pyplot(fig)
+
+    results = xgb.evals_result()
+
+    df_score = pd.DataFrame({
+        'iteration': range(len(results['validation_0']['logloss'])),
+        'train_logloss': results['validation_0']['logloss'],
+        'train_error': results['validation_0']['error'],
+        'train_auc': results['validation_0']['auc'],
+        'test_logloss': results['validation_1']['logloss'],
+        'test_error': results['validation_1']['error'],
+        'test_auc': results['validation_1']['auc'],
+    })
+
+    st.subheader("Hasil Evaluasi per Iterasi (Training vs Testing)")
+    st.dataframe(df_score)  # interaktif
+
+    st.subheader("Plot Logloss per Iterasi")
+    fig, ax = plt.subplots()
+    ax.plot(df_score['iteration'], df_score['train_logloss'], label='Train Logloss')
+    ax.plot(df_score['iteration'], df_score['test_logloss'], label='Test Logloss')
+    ax.set_xlabel('Iteration')
+    ax.set_ylabel('Logloss')
+    ax.legend()
+    st.pyplot(fig)
+
