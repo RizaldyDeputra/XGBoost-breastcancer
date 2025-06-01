@@ -160,7 +160,7 @@ if uploaded_file is not None:
     
     st.subheader("Kustomisasi 3 Pipeline XGBoost")
 
-        def pipeline_input(prefix):
+    def pipeline_input(prefix):
             st.subheader(f"Pipeline {prefix}")
             scaler_name = st.selectbox(f"Scaler {prefix}", ["None", "StandardScaler", "MinMaxScaler", "RobustScaler"], key=f"scaler_{prefix}")
             use_pca = st.checkbox(f"Gunakan PCA {prefix}?", key=f"pca_use_{prefix}")
