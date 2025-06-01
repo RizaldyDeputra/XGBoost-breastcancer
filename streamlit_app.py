@@ -54,8 +54,8 @@ if uploaded_file is not None:
     st.subheader("Evaluasi Model")
     acc = accuracy_score(y_train, xgb.predict(X_Train))
     report = classification_report(y_test, y_pred, output_dict=True)
-    st.write("**Akurasi pada data latih**:" acc)
-    st.write("**Akurasi pada data uji**:" accuracy_score(y_test,y_pred))
+    st.write("**Akurasi pada data latih**:", acc)
+    st.write("**Akurasi pada data uji**:", accuracy_score(y_test,y_pred))
     st.dataframe(pd.DataFrame(report).transpose())
 
     # Feature Importance
