@@ -90,110 +90,110 @@ if uploaded_file is not None:
     ax.legend()
     st.pyplot(fig)
 
-    #Kustomisasi Skema
-def get_scaler(name):
-    if name == "StandardScaler":
-        return StandardScaler()
-    elif name == "MinMaxScaler":
-        return MinMaxScaler()
-    elif name == "RobustScaler":
-        return RobustScaler()
-    else:
-        return None
-
-def build_pipeline(scaler_name, use_pca, n_components, max_depth, n_estimators, learning_rate, reg_alpha, reg_lambda):
-    steps = []
-    scaler = get_scaler(scaler_name)
-    if scaler is not None:
-        steps.append(('scaler', scaler))
-    if use_pca:
-        steps.append(('pca', PCA(n_components=n_components)))
-    steps.append(('model', XGBClassifier(
-        max_depth=max_depth,
-        n_estimators=n_estimators,
-        learning_rate=learning_rate,
-        reg_alpha=reg_alpha,
-        reg_lambda=reg_lambda,
-        objective='binary:logistic',
-        use_label_encoder=False,
-        eval_metric='logloss',
-        verbosity=0
-    )))
-    return Pipeline(steps)
-
-def evaluate_pipeline(pipeline, X_test, y_test):
-    y_pred = pipeline.predict(X_test)
-    acc = accuracy_score(y_test, y_pred)
-    report = classification_report(y_test, y_pred, output_dict=True)
-    return acc, report
-
-def plot_metrics_comparison(results):
-    # results = list of (idx, acc, report)
-    metrics = ['precision', 'recall', 'f1-score']
-    classes = ['0', '1']  # kelas negatif dan positif
-
-    # Prepare dataframe untuk plot
-    data = []
-    for idx, acc, report in results:
-        for cls in classes:
-            row = {'Pipeline': f'Pipeline {idx}', 'Class': cls}
-            for m in metrics:
-                row[m] = report[cls][m]
-            data.append(row)
-    df = pd.DataFrame(data)
-
-    st.subheader("Perbandingan Akurasi")
-    fig, ax = plt.subplots()
-    sns.barplot(data=pd.DataFrame(results, columns=['idx','accuracy','report'])[['idx','accuracy']], x='idx', y='accuracy', ax=ax)
-    ax.set_xticklabels([f'Pipeline {i}' for i in df['Pipeline'].unique()])
-    ax.set_ylim(0, 1)
-    ax.set_ylabel("Accuracy")
-    st.pyplot(fig)
-
-    st.subheader("Perbandingan Precision, Recall, F1-score per Kelas")
-    for metric in metrics:
-        fig, ax = plt.subplots()
-        sns.barplot(data=df, x='Pipeline', y=metric, hue='Class', ax=ax)
-        ax.set_ylim(0, 1)
-        ax.set_title(metric.capitalize())
-        st.pyplot(fig)
-
-st.subheader("Kustomisasi 3 Pipeline XGBoost")
-
-    def pipeline_input(prefix):
-        st.subheader(f"Pipeline {prefix}")
-        scaler_name = st.selectbox(f"Scaler {prefix}", ["None", "StandardScaler", "MinMaxScaler", "RobustScaler"], key=f"scaler_{prefix}")
-        use_pca = st.checkbox(f"Gunakan PCA {prefix}?", key=f"pca_use_{prefix}")
-        if use_pca:
-            n_components = st.slider(f"Jumlah komponen PCA {prefix}", 1, min(X_train.shape[1], 30), 10, key=f"pca_comp_{prefix}")
+        #Kustomisasi Skema
+    def get_scaler(name):
+        if name == "StandardScaler":
+            return StandardScaler()
+        elif name == "MinMaxScaler":
+            return MinMaxScaler()
+        elif name == "RobustScaler":
+            return RobustScaler()
         else:
-            n_components = None
-        max_depth = st.selectbox(f"max_depth {prefix}", [3, 5, 7], key=f"max_depth_{prefix}")
-        n_estimators = st.selectbox(f"n_estimators {prefix}", [50, 100, 150], key=f"n_estimators_{prefix}")
-        learning_rate = st.selectbox(f"learning_rate {prefix}", [0.01, 0.1, 0.3], key=f"learning_rate_{prefix}")
-        reg_alpha = st.number_input(f"reg_alpha (L1) {prefix}", min_value=0.0, max_value=10.0, value=0.0, step=0.1, key=f"reg_alpha_{prefix}")
-        reg_lambda = st.number_input(f"reg_lambda (L2) {prefix}", min_value=0.0, max_value=10.0, value=1.0, step=0.1, key=f"reg_lambda_{prefix}")
-        return scaler_name, use_pca, n_components, max_depth, n_estimators, learning_rate, reg_alpha, reg_lambda
+            return None
 
-    p1 = pipeline_input("1")
-    p2 = pipeline_input("2")
-    p3 = pipeline_input("3")
+    def build_pipeline(scaler_name, use_pca, n_components, max_depth, n_estimators, learning_rate, reg_alpha, reg_lambda):
+        steps = []
+        scaler = get_scaler(scaler_name)
+        if scaler is not None:
+            steps.append(('scaler', scaler))
+        if use_pca:
+            steps.append(('pca', PCA(n_components=n_components)))
+        steps.append(('model', XGBClassifier(
+            max_depth=max_depth,
+            n_estimators=n_estimators,
+            learning_rate=learning_rate,
+            reg_alpha=reg_alpha,
+            reg_lambda=reg_lambda,
+            objective='binary:logistic',
+            use_label_encoder=False,
+            eval_metric='logloss',
+            verbosity=0
+        )))
+        return Pipeline(steps)
 
-    if st.button("Train Ketiga Pipeline"):
-        pipelines = []
-        pipelines.append(build_pipeline(*p1))
-        pipelines.append(build_pipeline(*p2))
-        pipelines.append(build_pipeline(*p3))
+    def evaluate_pipeline(pipeline, X_test, y_test):
+        y_pred = pipeline.predict(X_test)
+        acc = accuracy_score(y_test, y_pred)
+        report = classification_report(y_test, y_pred, output_dict=True)
+        return acc, report
 
-        results = []
-        for i, pipe in enumerate(pipelines, 1):
-            pipe.fit(X_train, y_train)
-            acc, report = evaluate_pipeline(pipe, X_test, y_test)
-            results.append((i, acc, report))
-
+    def plot_metrics_comparison(results):
+        # results = list of (idx, acc, report)
+        metrics = ['precision', 'recall', 'f1-score']
+        classes = ['0', '1']  # kelas negatif dan positif
+    
+        # Prepare dataframe untuk plot
+        data = []
         for idx, acc, report in results:
-            st.subheader(f"Hasil Evaluasi Pipeline {idx}")
-            st.write(f"Akurasi: {acc:.4f}")
-            st.text(classification_report(y_test, pipelines[idx-1].predict(X_test)))
+            for cls in classes:
+                row = {'Pipeline': f'Pipeline {idx}', 'Class': cls}
+                for m in metrics:
+                    row[m] = report[cls][m]
+                data.append(row)
+        df = pd.DataFrame(data)
+    
+        st.subheader("Perbandingan Akurasi")
+        fig, ax = plt.subplots()
+        sns.barplot(data=pd.DataFrame(results, columns=['idx','accuracy','report'])[['idx','accuracy']], x='idx', y='accuracy', ax=ax)
+        ax.set_xticklabels([f'Pipeline {i}' for i in df['Pipeline'].unique()])
+        ax.set_ylim(0, 1)
+        ax.set_ylabel("Accuracy")
+        st.pyplot(fig)
+    
+        st.subheader("Perbandingan Precision, Recall, F1-score per Kelas")
+        for metric in metrics:
+            fig, ax = plt.subplots()
+            sns.barplot(data=df, x='Pipeline', y=metric, hue='Class', ax=ax)
+            ax.set_ylim(0, 1)
+            ax.set_title(metric.capitalize())
+            st.pyplot(fig)
+    
+    st.subheader("Kustomisasi 3 Pipeline XGBoost")
 
-        plot_metrics_comparison(results)
+        def pipeline_input(prefix):
+            st.subheader(f"Pipeline {prefix}")
+            scaler_name = st.selectbox(f"Scaler {prefix}", ["None", "StandardScaler", "MinMaxScaler", "RobustScaler"], key=f"scaler_{prefix}")
+            use_pca = st.checkbox(f"Gunakan PCA {prefix}?", key=f"pca_use_{prefix}")
+            if use_pca:
+                n_components = st.slider(f"Jumlah komponen PCA {prefix}", 1, min(X_train.shape[1], 30), 10, key=f"pca_comp_{prefix}")
+            else:
+                n_components = None
+            max_depth = st.selectbox(f"max_depth {prefix}", [3, 5, 7], key=f"max_depth_{prefix}")
+            n_estimators = st.selectbox(f"n_estimators {prefix}", [50, 100, 150], key=f"n_estimators_{prefix}")
+            learning_rate = st.selectbox(f"learning_rate {prefix}", [0.01, 0.1, 0.3], key=f"learning_rate_{prefix}")
+            reg_alpha = st.number_input(f"reg_alpha (L1) {prefix}", min_value=0.0, max_value=10.0, value=0.0, step=0.1, key=f"reg_alpha_{prefix}")
+            reg_lambda = st.number_input(f"reg_lambda (L2) {prefix}", min_value=0.0, max_value=10.0, value=1.0, step=0.1, key=f"reg_lambda_{prefix}")
+            return scaler_name, use_pca, n_components, max_depth, n_estimators, learning_rate, reg_alpha, reg_lambda
+    
+        p1 = pipeline_input("1")
+        p2 = pipeline_input("2")
+        p3 = pipeline_input("3")
+    
+        if st.button("Train Ketiga Pipeline"):
+            pipelines = []
+            pipelines.append(build_pipeline(*p1))
+            pipelines.append(build_pipeline(*p2))
+            pipelines.append(build_pipeline(*p3))
+    
+            results = []
+            for i, pipe in enumerate(pipelines, 1):
+                pipe.fit(X_train, y_train)
+                acc, report = evaluate_pipeline(pipe, X_test, y_test)
+                results.append((i, acc, report))
+    
+            for idx, acc, report in results:
+                st.subheader(f"Hasil Evaluasi Pipeline {idx}")
+                st.write(f"Akurasi: {acc:.4f}")
+                st.text(classification_report(y_test, pipelines[idx-1].predict(X_test)))
+    
+            plot_metrics_comparison(results)
