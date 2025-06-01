@@ -178,9 +178,11 @@ if uploaded_file is not None:
         
         return scaler_name, use_pca, n_components, max_depth, n_estimators, learning_rate, reg_alpha, reg_lambda
 
-    
+    st.markdown("### Pipeline 1")
     p1 = pipeline_input("1")
+    st.markdown("### Pipeline 2")
     p2 = pipeline_input("2")
+    st.markdown("### Pipeline 3")
     p3 = pipeline_input("3")
     
     if st.button("Train Ketiga Pipeline"):
