@@ -13,7 +13,7 @@ from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score, classification_report, roc_auc_score
 
 st.title('Breast Cancer Classification Using XGBoost')
-
+st.write('Dataset Breast Cancer Wisconsin adalah kumpulan data yang sering digunakan dalam penelitian klasifikasi dan deteksi kanker payudara. Dataset ini berisi fitur-fitur yang diekstraksi dari gambar digital hasil biopsi jarum halus (fine needle aspiration) dari massa payudara. Setiap sampel dalam dataset direpresentasikan oleh 30 atribut numerik yang menggambarkan karakteristik sel, seperti radius, tekstur, perimeter, luas, kehalusan, dan simetri inti sel. Dataset ini juga menyertakan label diagnosis yang diklasifikasikan sebagai benign (jinak) atau malignant (ganas).') 
 # Upload File Dataset
 uploaded_file = st.file_uploader("Upload file CSV dataset", type=["csv"])
 
