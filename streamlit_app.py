@@ -175,11 +175,11 @@ if uploaded_file is not None:
             reg_lambda = st.number_input(f"reg_lambda (L2) {prefix}", min_value=0.0, max_value=10.0, value=1.0, step=0.1, key=f"reg_lambda_{prefix}")
             return scaler_name, use_pca, n_components, max_depth, n_estimators, learning_rate, reg_alpha, reg_lambda
     
-        p1 = pipeline_input("1")
-        p2 = pipeline_input("2")
-        p3 = pipeline_input("3")
+    p1 = pipeline_input("1")
+    p2 = pipeline_input("2")
+    p3 = pipeline_input("3")
     
-        if st.button("Train Ketiga Pipeline"):
+    if st.button("Train Ketiga Pipeline"):
             pipelines = []
             pipelines.append(build_pipeline(*p1))
             pipelines.append(build_pipeline(*p2))
