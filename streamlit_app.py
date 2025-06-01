@@ -65,6 +65,7 @@ if uploaded_file is not None:
     plot_importance(xgb, importance_type='gain', max_num_features=10, ax=ax2)
     st.pyplot(fig2)
 
+    results = xgb.evals_result()
     df_score = pd.DataFrame({
         'iteration': range(len(results['validation_0']['logloss'])),
         'train_logloss': results['validation_0']['logloss'],
