@@ -21,7 +21,7 @@ if uploaded_file is not None:
     # Pra-pemrosesan 
     df.drop(['Unnamed: 32', 'id'], axis=1, inplace=True)
     df.rename(columns={"diagnosis": "target"}, inplace=True)
-    df["target"] = [1 if i.strip() == "M" else 0 for i in df.target]
+    
     
     st.subheader("Data Sample")
     st.write(df.head())
@@ -33,24 +33,26 @@ if uploaded_file is not None:
     st.pyplot(fig1)
 
     # Pembagian data
+    df["target"] = [1 if i.strip() == "M" else 0 for i in df.target]
     x = df.drop(['target'], axis=1)
     y = df['target']
     X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=0)
 
     # Standarisasi
     scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
+    X_Train = scaler.fit_transform(X_train)
+    X_Test = scaler.transform(X_test)
 
     # Model
+    eval_set = [(X_Train, y_train), (X_Test, y_test)]
     xgb = XGBClassifier(objective='binary:logistic', learning_rate=0.5, max_depth=5, n_estimators=180, eval_metric=["logloss","error","auc"])
-    xgb.fit(X_train_scaled, y_train)
+    xgb.fit(X_Train, y_train, eval_set=eval_set, verbose=False)
 
-    y_pred = xgb.predict(X_test_scaled)
+    y_pred = xgb.predict(X_Test)
 
     # Evaluasi
     st.subheader("Evaluasi Model")
-    acc = accuracy_score(y_test, y_pred)
+    acc = accuracy_score(y_train, xgb.predict(X_Train))
     report = classification_report(y_test, y_pred, output_dict=True)
     st.write(f"**Akurasi**: {acc:.4f}")
     st.dataframe(pd.DataFrame(report).transpose())
