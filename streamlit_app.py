@@ -161,19 +161,23 @@ if uploaded_file is not None:
     st.subheader("Kustomisasi 3 Pipeline XGBoost")
 
     def pipeline_input(prefix):
-            st.subheader(f"Pipeline {prefix}")
-            scaler_name = st.selectbox(f"Scaler {prefix}", ["None", "StandardScaler", "MinMaxScaler", "RobustScaler"], key=f"scaler_{prefix}")
-            use_pca = st.checkbox(f"Gunakan PCA {prefix}?", key=f"pca_use_{prefix}")
-            if use_pca:
-                n_components = st.slider(f"Jumlah komponen PCA {prefix}", 1, min(X_train.shape[1], 30), 10, key=f"pca_comp_{prefix}")
-            else:
-                n_components = None
-            max_depth = st.selectbox(f"max_depth {prefix}", [3, 5, 7], key=f"max_depth_{prefix}")
-            n_estimators = st.selectbox(f"n_estimators {prefix}", [50, 100, 150], key=f"n_estimators_{prefix}")
-            learning_rate = st.selectbox(f"learning_rate {prefix}", [0.01, 0.1, 0.3], key=f"learning_rate_{prefix}")
-            reg_alpha = st.number_input(f"reg_alpha (L1) {prefix}", min_value=0.0, max_value=10.0, value=0.0, step=0.1, key=f"reg_alpha_{prefix}")
-            reg_lambda = st.number_input(f"reg_lambda (L2) {prefix}", min_value=0.0, max_value=10.0, value=1.0, step=0.1, key=f"reg_lambda_{prefix}")
-            return scaler_name, use_pca, n_components, max_depth, n_estimators, learning_rate, reg_alpha, reg_lambda
+        scaler_name = st.selectbox("Scaler", ["None", "StandardScaler", "MinMaxScaler", "RobustScaler"], key=f"scaler_{prefix}")
+        
+        use_pca = st.checkbox("Gunakan PCA?", key=f"pca_use_{prefix}")
+        if use_pca:
+            n_components = st.slider("Jumlah komponen PCA", 1, min(X_train.shape[1], 30), 10, key=f"pca_comp_{prefix}")
+        else:
+            n_components = None
+    
+        max_depth = st.slider("Max Depth", min_value=1, max_value=10, value=5, step=1, key=f"max_depth_{prefix}")
+        n_estimators = st.slider("Jumlah Estimator", min_value=50, max_value=200, value=100, step=10, key=f"n_estimators_{prefix}")
+        learning_rate = st.slider("Learning Rate", min_value=0.01, max_value=0.5, value=0.1, step=0.01, key=f"learning_rate_{prefix}")
+        
+        reg_alpha = st.number_input("reg_alpha (L1)", min_value=0.0, max_value=10.0, value=0.0, step=0.1, key=f"reg_alpha_{prefix}")
+        reg_lambda = st.number_input("reg_lambda (L2)", min_value=0.0, max_value=10.0, value=1.0, step=0.1, key=f"reg_lambda_{prefix}")
+        
+        return scaler_name, use_pca, n_components, max_depth, n_estimators, learning_rate, reg_alpha, reg_lambda
+
     
     p1 = pipeline_input("1")
     p2 = pipeline_input("2")
