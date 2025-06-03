@@ -15,8 +15,8 @@ from sklearn.metrics import accuracy_score, classification_report, roc_auc_score
 st.title('Breast Cancer Classification Using XGBoost')
 deskripsi = """
 <p style='text-align: justify;'>
-Streamlit adalah framework Python yang digunakan untuk membuat antarmuka aplikasi web berbasis data secara cepat dan interaktif. 
-Dengan menuliskan kode sederhana, pengguna dapat menyajikan visualisasi, teks, dan elemen interaktif lainnya tanpa perlu menggunakan JavaScript atau HTML secara langsung.
+Dataset Breast Cancer Wisconsin adalah kumpulan data yang sering digunakan dalam penelitian klasifikasi dan deteksi kanker payudara. Dataset ini berisi fitur-fitur yang diekstraksi dari gambar digital hasil biopsi jarum halus (fine needle aspiration) dari massa payudara. 
+Setiap sampel dalam dataset direpresentasikan oleh 30 atribut numerik yang menggambarkan karakteristik sel, seperti radius, tekstur, perimeter, luas, kehalusan, dan simetri inti sel. Dataset ini juga menyertakan label diagnosis yang diklasifikasikan sebagai benign (jinak) atau malignant (ganas).
 </p>
 """
 
