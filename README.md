@@ -1,25 +1,27 @@
-# 📦 Streamlit App Starter Kit 
-```
-⬆️ (Replace above with your app's name)
-```
+# 🧬 Breast Cancer Classification Web App (XGBoost + Streamlit)
 
-Description of the app ...
+An interactive Streamlit web application that uses **XGBoost** for classifying breast cancer as *benign* or *malignant*. Upload your dataset, train the model, and evaluate performance.
 
-## Demo App
+---
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://app-starter-kit.streamlit.app/)
+## 🚀 Features
 
-## GitHub Codespaces
+- Upload breast cancer dataset (e.g. [sklearn's breast cancer dataset](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_breast_cancer.html))
+- Preprocess and visualize features
+- Train an XGBoost classifier
+- View confusion matrix and classification report
+- Pipeline Exploration
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/streamlit/app-starter-kit?quickstart=1)
+---
 
-## Section Heading
+## 📦 Built With
 
-This is filler text, please replace this with text for this section.
+- Python
+- Streamlit
+- XGBoost
+- Scikit-learn
+- Seaborn
+- Matplotlib
+- Pandas
 
-## Further Reading
-
-This is filler text, please replace this with a explanatory text about further relevant resources for this repo
-- Resource 1
-- Resource 2
-- Resource 3
+---
